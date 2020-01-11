@@ -1,0 +1,5 @@
+#DB files
+*.sqlite3
+
+#pipenv
+Pipfile
