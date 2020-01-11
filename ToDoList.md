@@ -2,7 +2,7 @@
 
 ## January
 ### 10th
-    - Watching Djaong guide for begginers on Youtube 
+    - Watching Django guide for begginers on Youtube 
 #### Note
 <https://www.youtube.com/watch?v=LYmZB5IIwAI>
 
