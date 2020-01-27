@@ -3,8 +3,8 @@ from django.shortcuts import HttpResponse
 # Create your views here.
 
 
-def Sample(request):
-    return HttpResponse("<h1>This is sample response</h1>")
+def Home(request):
+    return render(request, 'home.html')
 
 
 def Contact(request):
