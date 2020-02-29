@@ -120,7 +120,7 @@ def delete_question(request):
         return redirect('practice_page')
 
 
-def save_question(request):
+def update_question(request):
     if(request.method == "GET"):
         return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
     else:

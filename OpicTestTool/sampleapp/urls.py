@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import practice_page, util_page, exam_page
-from .views import selected_question, random_question, add_question, delete_question, save_question
+from .views import selected_question, random_question, add_question, delete_question, update_question
 
 urlpatterns = [
     path('', practice_page, name='practice_page'),
@@ -11,5 +11,5 @@ urlpatterns = [
     path('random_question/', random_question, name='random_question'),
     path('add_question/', add_question, name='add_question'),
     path('delete_question/', delete_question, name='delete_question'),
-    path('save_question/', save_question, name='save_question'),
+    path('update_question/', update_question, name='update_question'),
 ]

@@ -3,3 +3,6 @@
 
 #pipenv
 Pipfile
+
+#audio files
+*.mp3
