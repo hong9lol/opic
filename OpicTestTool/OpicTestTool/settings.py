@@ -25,7 +25,7 @@ SECRET_KEY = '-%4k8=$9p*yh^jrjx#-_!o(m2z@bh%v$^gv2q7=3ju$hx*ei$a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '220.88.28.198']
 
 
 # Application definition
@@ -77,15 +77,14 @@ WSGI_APPLICATION = 'OpicTestTool.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mydjango',
+        'NAME': 'opic_tool',
         'USER': 'django',
         'PASSWORD': '1111',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
-
-
+DATABASE_OPTIONS = {'charset': 'utf8'}
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -123,3 +122,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

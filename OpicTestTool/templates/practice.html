@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Make your Speaking better with us
+{% endblock %}
+
+{% block body %}
+    <div class="container row">
+        <div class="col-3">
+            <form action="{% url 'selected_question' %}" method="post">    
+                {% csrf_token %}
+                {{choices.question_types}}       
+            </form>
+        </div>
+
+        <div class="col-1">
+            <form action="{% url 'random_question' %}" method="post">    
+                {% csrf_token %}
+                <button type="submit" class="btn btn-info btn-ss">
+                    <span class="glyphicon glyphicon-random"></span> Random
+                </button>                                
+            </form>
+        </div>
+
+        <div class="col-1 offset-5">
+            {% comment %} <form action="{% url 'add_question' %}" method="post">    {% endcomment %}
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <button id="add_question_button" type="submit" class="btn btn-danger btn-ss">
+                    <span class="glyphicon glyphicon-plus"></span> Add                 
+                </button>  
+            {% comment %} </form> {% endcomment %}
+        </div> 
+
+        <div class="col-1">
+            <form action="{% url 'delete_question' %}" method="post" action="/y/b/" enctype="multipart/form-data"onsubmit="return confirm('Do you really want to delete this question?');">   
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-ss">
+                    <span class="glyphicon glyphicon-trash"></span> Del                 
+                </button>  
+            </form>
+        </div> 
+    </div>
+
+    <div class="container row">
+        <div class="col-11">
+            <h3> Question 
+                <audio id="question_audio">
+                    <source src="http://localhost/questions/{{question_type}}.mp3" type="audio/mpeg">
+                </audio>
+                <button id ="play_question_button" type="submit"class="btn btn-secondary btn-ss">
+                    <span class="glyphicon glyphicon-play"></span>                   
+                </button>
+            </h3>
+        </div>
+
+        <div class="col-11">
+            <p class="opic-question" rows=5> - {{question}} </p> 
+        </div>  
+    </div>   
+        
+    <form action="{% url 'update_question' %}" method="post">
+        <div class="container row">
+            <div class="col-6">
+                <h3> Sample Answer
+                    {{note.sample_answer}}
+                </h3>
+            </div>
+
+            <div class="col-5"> 
+                <h3> Description
+                    {{note.description}}
+                </h3>
+            </div>
+        </div>
+
+        <div class="container row">
+            <div class="col-2 offset-10"> 
+                    {% csrf_token %}  
+                    <button type="submit" class="btn btn-success btn-ss">
+                        Update<span class="glyphicon"></span>                 
+                    </button>  
+            </div>
+        </div>
+    </form>
+    <!-- The Modal -->
+    <div id="add_question_modal" class="opic-modal">
+    <!-- Modal content -->
+        <div class="opic-modal-content">
+            <span id ="add_question_modal_close" class="opic-close">&times;</span>
+            {{question_adding_form.type}}
+            {{question_adding_form.question}}
+            {{question_adding_form.sample_answer}}
+            {{question_adding_form.description}}
+
+        <div class="col-1 offset-11"> 
+            <button type="submit" class="btn btn-primary btn-ss">
+                Save <span class="glyphicon glyphicon-save"></span>                 
+            </button>
+        </div>  
+        </div>
+    </div>
+{% endblock %}

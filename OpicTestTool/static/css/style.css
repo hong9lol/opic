@@ -1,0 +1,102 @@
+@charset "utf-8";
+
+:root {
+  --resize: none;
+  --background-color: #f7f9f9;
+  --main-font-size: 15pt;
+  --sub-font-size: 12pt;
+  --tts-font-size: 12pt;
+
+  --question-width: 100%;
+  --question-height: 10%;
+
+  --description-width: 100%;
+  --description-height: 30%;
+
+  --sample-answer-width: 100%;
+  --sample-answer-height: 30%;
+
+  --tts-context-width: 100%;
+  --tts-context-height: 100%;
+}
+
+.opic-question {
+  resize: var(--resize, none);
+  width: var(--question-width, 100%);
+  height: var(--question-height, 10%);
+
+  background-color: var(--opic-background-color, white);
+  font-size: var(--main-font-size, 20pt);
+}
+
+.opic-description {
+  resize: var(--resize, none);
+  width: var(--description-width, 100%);
+  height: var(--description-height, 30%);
+
+  background-color: var(--opic-background-color, white);
+  font-size: var(--sub-font-size, 12pt);
+
+  line-height: 130%;
+}
+
+.opic-sample-answer {
+  resize: var(--resize, none);
+  width: var(--sample-answer-width, 100%);
+  height: var(--sample-answer-height, 30%);
+
+  background-color: var(--opic-background-color, white);
+  font-size: var(--sub-font-size, 12pt);
+
+  line-height: 130%;
+}
+
+.opic-tts-context {
+  resize: var(--resize, none);
+  width: var(--tts-context, 100%);
+  height: var(--tts-context, 100%);
+
+  background-color: var(--opic-background-color, white);
+  font-size: var(--tts-font-size, 12pt);
+
+  line-height: 130%;
+}
+
+/* The Modal (background) */
+.opic-modal {
+  display: none; /* hiddenby default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.opic-modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.modal-close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
