@@ -46,21 +46,27 @@
 - Use MySQL as a database
 
   1. Install mysql
-  2. Create user for django
+  2. Create database(\*make sure put this option to use Korean ad input)
+
+  ```
+  CREATE DATABASE music CHARACTER SET utf8 COLLATE utf8_general_ci;
+  ```
+
+  3. Create user for django
 
   ```
   create user 'django'@'localhost' identified by '1111';
   grant usage on *.* to 'django'@'localhost';
-  grant all privileges on <DB NAME> to 'django'@'localhost';
+    grant all privileges on <DB NAME>.* to 'django'@'localhost';
   ```
 
-  3. Set below text in setting.py
+  4. Set below text in setting.py
 
   ```
   DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mydjango',
+        'NAME': 'opic_tool',
         'USER': 'django',
         'PASSWORD': '1111',
         'HOST': 'localhost',
@@ -69,15 +75,15 @@
   }
   ```
 
-  4. Migrate databse
+  5. Migrate databse
 
   ```
   python manage.py migrate
   ```
 
-  5. Make super user for new DB
+  6. Make super user for new DB
 
-- What are the Django models
+- What are the Django models?
 
   1.  With models you can make Tables
   2.  First make Model class and makemigrations and migrata
@@ -107,3 +113,32 @@
   ```
   return render(request, 'home.html')
   ```
+
+  4. When you want to return some data to html
+
+  - get data from model
+  - put data like
+
+  ```
+  obj = Question.objects.get(id=1)
+  context = {
+      "data": obj
+  }
+  return render(request, 'home.html', context)
+  ```
+
+  - use data in html file
+
+  ```
+  {{data.type}}
+  {{data.xxx}}
+  ```
+
+- Using Form in Django
+
+  1. See the /Note/Html_Form.md to know what form is
+  2. Make form.py in your app folder and make a form (refer forms.py)
+  3. Return the form at views.py using context
+  4. Show the form at html file using like {{form.as_p}}
+
+-
