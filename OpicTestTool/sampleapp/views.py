@@ -1,12 +1,16 @@
+import os
 from random import randint
 
 from django.shortcuts import HttpResponse, render, redirect
+from django.utils import timezone
 
 from .models import Question
-from .forms import QuestionForm, QuestionChoiceForm, NoteForm, TTSContextForm
+from .forms import AddQuestionForm, QuestionChoiceForm, NoteForm, TTSContextForm
 
+
+from .configuration.config import QUESTION_AUDIO_PATH
 from .core.TTS import TTS
-from .core.Utils import Singleton
+from .utils.singleton import Singleton
 
 
 class _CurrentQuestion(object):
@@ -34,8 +38,7 @@ def practice_page(request):
         choices = QuestionChoiceForm()
         choices.fields['question_types'].initial = _current_question.index
 
-        question_adding_form = QuestionForm()
-
+        question_adding_form = AddQuestionForm()
         context = {
             "question_type": question_type,
             "question": question,
@@ -53,12 +56,12 @@ def exam_page(request):
         return render(request, 'exam.html')
 
 
-def util_page(request):
+def tts_page(request):
     if(request.method == "GET"):
         context = {
             "form": TTSContextForm()
         }
-        return render(request, 'util.html', context)
+        return render(request, 'tts.html', context)
     else:
         form = TTSContextForm(request.POST)
         if form.is_valid():
@@ -92,10 +95,11 @@ def random_question(request):
     if(request.method == "GET"):
         return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
     else:
-        questions = list(Question.objects.values_list(
-            'type'))
-        _current_question.index = randint(2, len(questions))
-        _current_question.type = questions[_current_question.index - 1][0]
+        if _current_question.index != 1:
+            questions = list(Question.objects.values_list(
+                'type'))
+            _current_question.index = randint(2, len(questions))
+            _current_question.type = questions[_current_question.index - 1][0]
 
         return redirect('practice_page')
 
@@ -104,7 +108,25 @@ def add_question(request):
     if(request.method == "GET"):
         return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
     else:
-        return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
+        question = AddQuestionForm(request.POST)
+        if question.is_valid():
+            idx = int(question.cleaned_data['types'])
+            _type = dict(question.fields['types'].choices)[idx]
+            _question = question.cleaned_data['question']
+
+            questions = list(Question.objects.values_list('type'))
+            for i in range(0, 100):
+                if questions.count(tuple([_type + str(i+1)])) == 0:
+                    Question.objects.create(
+                        type=_type + str(i+1), question=_question, description="", sample_answer="", difficulty=0, frequency=0, pub_date=timezone.now())
+
+                    _tts = TTS(_question)
+                    if _tts.make_question_audio(_type + str(i+1)):
+                        return redirect('practice_page')
+                    else:
+                        break
+
+        return HttpResponse("<H1>Can Make Your Question</H1>", status=500)
 
 
 def delete_question(request):
@@ -114,6 +136,10 @@ def delete_question(request):
         if _current_question.index != 1:
             obj = Question.objects.get(type=_current_question.type)
             obj.delete()
+            print(QUESTION_AUDIO_PATH + _current_question.type)
+            if os.path.isfile(QUESTION_AUDIO_PATH + _current_question.type + ".mp3"):
+                os.remove(QUESTION_AUDIO_PATH +
+                          _current_question.type + ".mp3")
             _current_question.index = 1
             _current_question.type = "------------------------------"
 

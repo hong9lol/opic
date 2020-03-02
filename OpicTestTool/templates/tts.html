@@ -7,7 +7,7 @@ Make your Speaking better with us
 {% block body %}
 
     <div class="container">
-        <form action="/util/" method="post">
+        <form action="{% url 'tts_page' %}" method="post">
             {% csrf_token %}
             <div class="col-10">
             <h3> Context </h3>
