@@ -1,6 +1,7 @@
-import sys
 import re
 from google.cloud import texttospeech
+
+from ..configuration.config import QUESTION_AUDIO_PATH
 
 
 class TTS():
@@ -19,9 +20,8 @@ class TTS():
             audio_encoding=texttospeech.enums.AudioEncoding.MP3)
 
     def text_to_speach(self):
-            # Set the text input to be synthesized
-        synthesis_input = texttospeech.types.SynthesisInput(
-            text=self.context)
+        # Set the text input to be synthesized
+        synthesis_input = texttospeech.types.SynthesisInput(text=self.context)
         # Perform the text-to-speech request on the text input with the selected
         # voice parameters and audio file type
         response = self.client.synthesize_speech(
@@ -32,3 +32,14 @@ class TTS():
 
         file = open("./TTS.mp3", "rb").read()
         return file
+
+    def make_question_audio(self, title):
+        synthesis_input = texttospeech.types.SynthesisInput(text=self.context)
+
+        response = self.client.synthesize_speech(
+            synthesis_input, self.voice, self.audio_config)
+
+        with open("/home/jake/question_audio_files/" + title + ".mp3", 'wb') as out:
+            out.write(response.audio_content)
+
+        return True
