@@ -139,7 +139,7 @@ def delete_question(request):
         if _current_question.index != 1:
             obj = Question.objects.get(type=_current_question.type)
             obj.delete()
-            print(QUESTION_AUDIO_PATH + _current_question.type)
+
             if os.path.isfile(QUESTION_AUDIO_PATH + _current_question.type + ".mp3"):
                 os.remove(QUESTION_AUDIO_PATH +
                           _current_question.type + ".mp3")
