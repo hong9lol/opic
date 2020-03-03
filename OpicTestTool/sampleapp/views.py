@@ -95,11 +95,14 @@ def random_question(request):
     if(request.method == "GET"):
         return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
     else:
-        if _current_question.index != 1:
-            questions = list(Question.objects.values_list(
-                'type'))
-            _current_question.index = randint(2, len(questions))
-            _current_question.type = questions[_current_question.index - 1][0]
+        questions = list(Question.objects.values_list(
+            'type'))
+
+        if len(questions) < 2:
+            return redirect('practice_page')
+
+        _current_question.index = randint(2, len(questions))
+        _current_question.type = questions[_current_question.index - 1][0]
 
         return redirect('practice_page')
 
