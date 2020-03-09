@@ -1,45 +1,44 @@
-import re
 from google.cloud import texttospeech
 
 from ..configuration.config import QUESTION_AUDIO_PATH
 
+from datetime import datetime
+
 
 class TTS():
-    def __init__(self, context=""):
+    def __init__(self, context):
         self.context = context
-        # Set google TTS config
-        # Instantiates a client
         self.client = texttospeech.TextToSpeechClient()
-        # Build the voice request, select the language code ("en-US") and the ssml
-        # voice gender ("neutral")
         self.voice = texttospeech.types.VoiceSelectionParams(
-            language_code='en-US',
-            ssml_gender=texttospeech.enums.SsmlVoiceGender.NEUTRAL)
-        # Select the type of audio file you want returned
+            language_code='en-US', ssml_gender=texttospeech.enums.SsmlVoiceGender.NEUTRAL)
         self.audio_config = texttospeech.types.AudioConfig(
             audio_encoding=texttospeech.enums.AudioEncoding.MP3)
 
     def text_to_speach(self):
-        # Set the text input to be synthesized
         synthesis_input = texttospeech.types.SynthesisInput(text=self.context)
-        # Perform the text-to-speech request on the text input with the selected
-        # voice parameters and audio file type
+
         response = self.client.synthesize_speech(
             synthesis_input, self.voice, self.audio_config)
 
-        with open("./TTS.mp3", 'wb') as out:
+        title_time = _getTime()
+        with open('./tts_' + title_time + '.mp3', 'wb') as out:
             out.write(response.audio_content)
 
-        file = open("./TTS.mp3", "rb").read()
+        file = open('./tts_' + title_time + '.mp3', "rb").read()
         return file
 
-    def make_question_audio(self, title):
+    def make_question_audio(self, title='TTS'):
         synthesis_input = texttospeech.types.SynthesisInput(text=self.context)
 
         response = self.client.synthesize_speech(
             synthesis_input, self.voice, self.audio_config)
 
-        with open("/home/jake/question_audio_files/" + title + ".mp3", 'wb') as out:
+        with open(QUESTION_AUDIO_PATH + title + '.mp3', 'wb') as out:
             out.write(response.audio_content)
 
         return True
+
+    def _getTime(self):
+        now = datetime.now()
+        time = now.strftime('%Y-%m-%d_%H:%M:%S')
+        return time

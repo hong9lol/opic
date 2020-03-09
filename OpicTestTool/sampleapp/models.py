@@ -3,8 +3,9 @@ from django.utils import timezone
 
 
 class Question(models.Model):
-    type = models.CharField(max_length=30)  # have to be a unique value
-    question = models.TextField(null=True, blank=True)
+    type = models.CharField(max_length=60, null=True)
+    title = models.CharField(max_length=60, null=True)
+    question = models.TextField(max_length=500, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     sample_answer = models.TextField(null=True, blank=True)
     difficulty = models.IntegerField(null=True, blank=True)

@@ -14,6 +14,7 @@ play_question_button.onclick = function() {
 
 add_question_button.onclick = function() {
   // add_question_save_button.removeAttribute("disabled"); // it is not working due to secure error
+  document.getElementById("p_warning").style.visibility = "hidden";
   add_question_modal.style.display = "block";
 };
 
@@ -31,3 +32,31 @@ window.onclick = function(event) {
     add_question_modal.style.display = "none";
   }
 };
+
+function addQeustionValidate() {
+  var _title = document.getElementById("id_title").value;
+  var _question = document.getElementById("id_question").value;
+  var _warning = document.getElementById("p_warning");
+
+  if (_title.length > 30) {
+    _warning.innerHTML = "*The title is too long.";
+    _warning.style.visibility = "visible";
+    return false;
+  }
+
+  for (var i in question_titles) {
+    if (question_titles[i] == _title) {
+      _warning.innerHTML = "*The title already exists.";
+      _warning.style.visibility = "visible";
+      return false;
+    }
+  }
+
+  if (_question.length > 500) {
+    _warning.innerHTML = "*The question is too long.";
+    _warning.style.visibility = "visible";
+    return false;
+  }
+
+  return true;
+}
