@@ -20,6 +20,13 @@
   --tts-context-height: 100%;
 }
 
+.opic-add-title {
+  resize: var(--resize, none);
+
+  background-color: var(--opic-background-color, white);
+  font-size: var(--main-font-size, 11pt);
+}
+
 .opic-question {
   resize: var(--resize, none);
   width: var(--question-width, 100%);
@@ -36,8 +43,8 @@
 
   background-color: var(--opic-background-color, white);
   font-size: var(--sub-font-size, 12pt);
-
   line-height: 130%;
+  border-radius: 7px;
 }
 
 .opic-sample-answer {
@@ -47,8 +54,8 @@
 
   background-color: var(--opic-background-color, white);
   font-size: var(--sub-font-size, 12pt);
-
   line-height: 130%;
+  border-radius: 7px;
 }
 
 .opic-tts-context {
@@ -60,6 +67,7 @@
   font-size: var(--tts-font-size, 12pt);
 
   line-height: 130%;
+  border-radius: 7px;
 }
 
 .opic-add-question {
@@ -71,6 +79,14 @@
   font-size: 12pt;
 
   line-height: 130%;
+}
+
+.opic-rbutton {
+  float: right;
+}
+
+.opic-lbutton {
+  float: left;
 }
 
 /* The Modal (background) */
