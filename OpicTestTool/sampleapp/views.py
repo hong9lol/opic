@@ -5,7 +5,7 @@ from django.shortcuts import HttpResponse, render, redirect
 from django.utils import timezone
 
 from .models import Question
-from .forms import AddQuestionForm, TitleChoiceForm, NoteForm, TTSContextForm
+from .forms import AddQuestionForm, TitleChoiceForm, NoteForm, TTSContextForm, ExamTypeChoiceForm
 
 from .pages.practice import Practice
 from .pages.exam import Exam
@@ -15,7 +15,7 @@ from .configuration.config import QUESTION_AUDIO_PATH
 from .utils.singleton import Singleton
 
 INIT_INDEX = 1
-INIT_TITLE = "------------------------------------------------------------"
+INIT_TITLE = '------------------------------------------------------------'
 INIT_NUM_OF_QUESTIONS = 0
 
 
@@ -32,7 +32,7 @@ _current_question = _CurrentQuestion()
 
 
 def practice_page(request):
-    if request.method == "GET":
+    if request.method == 'GET':
 
         # To show question title, question on the page
         obj = Question.objects.all().get(title=_current_question.title)
@@ -57,30 +57,35 @@ def practice_page(request):
 
         data = {
             # data
-            "titles": titles,
-            "question": question,
+            'titles': titles,
+            'question': question,
             # form
-            "title_choice_form": title_choice,
-            "note_form": note,
-            "question_adding_form": question_adding_form
+            'title_choice_form': title_choice,
+            'note_form': note,
+            'question_adding_form': question_adding_form
         }
         return render(request, 'practice.html', data)
 
-    return HttpResponse("<H1>Can not Support this Request</H1>", status=404)
+    return HttpResponse('<H1>Can not Support this Request</H1>', status=404)
 
 
 def exam_page(request):
-    if request.method == "GET":
-        return render(request, 'exam.html')
+    if request.method == 'GET':
+
+        types = ExamTypeChoiceForm()
+        data = {
+            'types': types['types']
+        }
+        return render(request, 'exam.html', data)
 
 
 def tts_page(request):
-    if request.method == "GET":
+    if request.method == 'GET':
         data = {
             'tts_form': TTSContextForm()
         }
         return render(request, 'tts.html', data)
-    elif request.method == "POST":
+    elif request.method == 'POST':
         form = TTSContextForm(request.POST)
         if form.is_valid():
             context = form.cleaned_data['context']
@@ -88,14 +93,14 @@ def tts_page(request):
 
             response = HttpResponse(
                 _tts.text_to_speach(context), content_type='audio/mpeg')
-            response['Content-Disposition'] = "attachment; filename=TTS.mp3"
+            response['Content-Disposition'] = 'attachment; filename=TTS.mp3'
             return response
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
 
 
 def selected_question(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         choice = TitleChoiceForm(request.POST)
         if choice.is_valid():
             _current_question.index = int(
@@ -104,13 +109,13 @@ def selected_question(request):
                 _current_question.index]
             return redirect('practice_page')
         else:
-            return HttpResponse("<H1> Select Question Error </H1>")
+            return HttpResponse('<H1> Select Question Error </H1>')
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
 
 
 def random_question(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         questions = list(Question.objects.values_list('title'))
 
         if len(questions) < 2:
@@ -121,11 +126,11 @@ def random_question(request):
 
         return redirect('practice_page')
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
 
 
 def add_question(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         input_question = AddQuestionForm(request.POST)
         if input_question.is_valid():
             idx = int(input_question.cleaned_data['types'])
@@ -134,8 +139,8 @@ def add_question(request):
             _question = input_question.cleaned_data['question']
 
             Question.objects.create(
-                title=_title, type=_type, question=_question, description="",
-                sample_answer="", difficulty=0, frequency=0, pub_date=timezone.now())
+                title=_title, type=_type, question=_question, description='',
+                sample_answer='', difficulty=0, frequency=0, pub_date=timezone.now())
 
             _tts = TTS(_question)
             if _tts.make_question_audio(_title):
@@ -144,18 +149,18 @@ def add_question(request):
                 _current_question.title = _title
                 return redirect('practice_page')
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
 
 
 def delete_question(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         if _current_question.index != 1:
             obj = Question.objects.get(title=_current_question.title)
             obj.delete()
 
-            if os.path.isfile(QUESTION_AUDIO_PATH + _current_question.title + ".mp3"):
+            if os.path.isfile(QUESTION_AUDIO_PATH + _current_question.title + '.mp3'):
                 os.remove(QUESTION_AUDIO_PATH +
-                          _current_question.title + ".mp3")
+                          _current_question.title + '.mp3')
 
             _current_question.num_of_questions -= 1
             _current_question.index = INIT_INDEX
@@ -163,11 +168,11 @@ def delete_question(request):
 
             return redirect('practice_page')
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
 
 
 def update_question(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         note = NoteForm(request.POST)
         if note.is_valid():
             _sample_answer = note.cleaned_data['sample_answer']
@@ -180,4 +185,4 @@ def update_question(request):
 
             return redirect('practice_page')
 
-    return HttpResponse("<H1> Page Error </H1>")
+    return HttpResponse('<H1> Page Error </H1>')
