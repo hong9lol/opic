@@ -48,6 +48,11 @@ class TTSContextForm(forms.Form):
         attrs={'class': 'opic-tts-context', 'rows': '30'}))
 
 
+class ExamTypeChoiceForm(forms.Form):
+    types = forms.ChoiceField(choices=QUESTION_TYPES,
+                              widget=forms.CheckboxSelectMultiple(attrs={}))
+
+
 def get_title_choices():
     _titles = list(Question.objects.values_list('title'))
     for i, _ in enumerate(_titles):
