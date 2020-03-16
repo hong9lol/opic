@@ -1,6 +1,11 @@
+//Practice HTML
 var play_question_button = document.getElementById("play_question_button");
 var add_question_button = document.getElementById("add_question_button");
 var add_question_modal = document.getElementById("add_question_modal");
+var practice_question_audio = document.getElementById(
+  "practice_question_audio"
+);
+
 var add_question_modal_span = document.getElementById(
   "add_question_modal_close"
 );
@@ -9,7 +14,7 @@ var add_question_save_button = document.getElementById(
 );
 
 play_question_button.onclick = function() {
-  question_audio.play();
+  practice_question_audio.play();
 };
 
 add_question_button.onclick = function() {

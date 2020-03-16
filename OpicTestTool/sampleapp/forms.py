@@ -11,7 +11,7 @@ QUESTION_TYPES = [
     (6, 'Music'),
     (7, 'Show'),
     (8, 'Transportation'),
-    (9, 'Appointment'),
+    (9, 'Walk'),
     (10, 'Etc'),
     (11, 'Role-Play'),
     (12, 'Unexpected')]
@@ -46,11 +46,6 @@ class AddQuestionForm(forms.Form):
 class TTSContextForm(forms.Form):
     context = forms.CharField(widget=forms.Textarea(
         attrs={'class': 'opic-tts-context', 'rows': '30'}))
-
-
-class ExamTypeChoiceForm(forms.Form):
-    types = forms.ChoiceField(choices=QUESTION_TYPES,
-                              widget=forms.CheckboxSelectMultiple(attrs={}))
 
 
 def get_title_choices():

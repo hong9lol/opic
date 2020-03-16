@@ -13,4 +13,4 @@ class Question(models.Model):
     pub_date = models.DateField(timezone.now())
 
     def __str__(self):
-        return self.type
+        return self.title
