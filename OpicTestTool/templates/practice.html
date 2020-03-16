@@ -41,7 +41,7 @@ Make your Speaking better with us
     <div class="row">
         <div class="col-11">
             <h3> Question 
-                <audio id="question_audio">
+                <audio id="practice_question_audio">
                     <source src="http://220.88.28.198/~jake/{{question.title}}.mp3" type="audio/mpeg">
                 </audio>
                 <button id ="play_question_button" type="submit"class="btn btn-default btn-xs">
@@ -56,6 +56,7 @@ Make your Speaking better with us
     </div>   
         
     <form action="{% url 'update_question' %}" method="post">
+        {% csrf_token %}
         <div class="row">
             <div class="col-7">
                 <h3> Sample Answer
@@ -72,7 +73,6 @@ Make your Speaking better with us
 
         <div class="row">
             <div class="col-12">
-                {% csrf_token %}
                 <button type="submit" class="opic-rbutton btn btn-success btn-ss">
                     Update<span class="glyphicon"></span>
                 </button>
@@ -81,26 +81,27 @@ Make your Speaking better with us
     </form>
     
     <div id="add_question_modal" class="opic-modal">
-        <form onsubmit="return addQeustionValidate()" action="{% url 'add_question' %}" method="post">  
-            {% csrf_token %} 
-            <div class="opic-modal-content">
-                <div class="container" style="width:100%">
-                    <div class="col-1 offset-11">
-                        <button id="add_question_modal_close" class="btn btn-btn-default_if_none btn-ss">
-                            <span class="glyphicon glyphicon-">close&times</span>                 
-                        </button>
-                    </div>
-                    <div class="col-12">   
-                        <H2>Add New Question </H2>
-                    </div>
-                    <div class="col-12">   
-                        <p id="p_warning" align="right" style="color:red;visibility:hidden"> </p>
-                    </div>
+        <div class="opic-modal-content">
+            <div class="container" style="width:100%">
+                <div class="col-1 offset-11">
+                    <button id="add_question_modal_close" class="btn btn-btn-default_if_none btn-ss">
+                        <span class="glyphicon glyphicon-">close&times</span>                 
+                    </button>
+                </div>
+                <div class="col-12">   
+                    <H2>Add New Question </H2>
+                </div>
+                <div class="col-12">   
+                    <p id="p_warning" align="right" style="color:red;visibility:hidden"> </p>
+                </div>
+                
+                <form onsubmit="return addQeustionValidate()" action="{% url 'add_question' %}" method="post">  
+                    {% csrf_token %} 
                     <div class="col-4">
                         <H4>Type</H4>
                         {{question_adding_form.types}}
                     </div>
-                    <div class="col-6">
+                    <div class="col-12">
                         <H4>Title</H4> 
                         {{question_adding_form.title}}
                     </div>
@@ -112,13 +113,14 @@ Make your Speaking better with us
                         <button id="add_question_save_button" class="opic-rbutton btn btn-primary btn-ss" type="submit"> 
                             Save <span class="glyphicon glyphicon-save"></span>
                         </button>
-                    </div>
-                </div>
+                    </div> 
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 
     <script>
         var question_titles = {{ titles | safe }}
     </script>
+    <script type="text/javascript" src="../static/js/practice_script.js"></script>
 {% endblock %}

@@ -6,8 +6,75 @@ Make your Speaking better with us
 
 {% block body %}
     <div class="row">
-        <div class="offset-10 col-2">
-            {{types}}
-        </div<
+        <div class="opic-exam">
+            <div class="row col-12">
+                <div class="col-6">
+                    <H3 id="question_number">[Question 1]</H3>
+                </div>
+                <div class="col-6" style="text-align:right">
+                    <H3 id="speak_time">Time: 0:00</H3>
+                </div>
+            </div>
+
+            <div class="row col-12">
+                <img src="../static/images/eva.png" alt="Eva Image" width="100%" heigh="100%">
+            </div>
+            </br>
+            <div class="row col-12">
+                <audio id="exam_question_audio">
+                    <source id="exam_question_audio_src" type="audio/mpeg">
+                </audio>
+                <div class="col-4">
+                    <button id="exam_play_button" class="opic-lbutton col-10 btn btn-default btn-ss"> 
+                        Play
+                    </button>
+                </div>
+                <div class="col-4" style="text-align:center">
+                    <form action="{% url 'exam_page' %}" method="post">
+                        {% csrf_token %}
+                        <button id="exam_end_button" class="col-10 btn btn-danger btn-ss" type="submit" style ="visibility:hidden";> 
+                            시험 종료
+                        </button>
+                    </form>
+                </div>
+                <div class="col-4">
+                    <button id="exam_next_button" class="opic-rbutton col-10 btn btn-default btn-ss">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="help_modal" class="opic-help-modal">
+        <div class="opic-help-modal-content">
+            <div class="container" style="width:100%">
+                <div class="col-12">   
+                    <H2>시험 안내 사항</H2>
+                    </br>
+                </div>
+                <div class="col-12">
+                    <H4> 1. 문제는 총 15문제로 구성되어 있습니다. </H4>
+                    <H4> 2. 문제는 Practice에 있는 문제 중 랜덤으로 출제 됩니다. </H4>
+                    <H4> 3. 아래 "시작하기" 버튼을 눌러 시험을 시작합니다. </H4>
+                    <H4> 4. 시험이 시작되면 "Play" 버튼을 눌러 문제를 듣습니다. </H4>
+                    <H4> 5. 시험 문제 재생에 횟수 제한은 없습니다. </H4>
+                    <H4> 6. 문제가 모두 재생되면 답변을 시작합니다. </H4>
+                    <H4> 7. 답변 후 "Next" 버튼을 눌러 다음 문제로 넘어갑니다. </H4>  
+                    <H4> 8. 시험이 종료되면 결과 내용을 확인 하실 수 있습니다. </H4>
+                    </br>
+                </div>
+                <div class="col-12">
+                    <button id="start_button" class="col-12 btn btn-info btn-ss" type="submit"> 
+                        시작하기 <span class="glyphicon"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+        var questions = {{ questions | safe }}
+    </script>
+    <script type="text/javascript" src="../static/js/exam_script.js"></script>
 {% endblock %}

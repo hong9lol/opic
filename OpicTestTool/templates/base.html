@@ -18,13 +18,23 @@
     
 <body>
     <div class="container">
-        <div style="width:1140px;">
-
+        <div id="_screen">
             {% block body %} {% endblock %}
-
         </div>
     </div>
-    <script type="text/javascript" src="../static/js/script.js"></script>
+
+    <script>
+    function setWindowWidth() {
+        if(screen.width > 1200) {
+            var w = ((screen.width)*0.6).toString();
+            document.getElementById("_screen").style.width = w + "px";
+        } else {
+            var w = (screen.width).toString();
+            document.getElementById("_screen").style.width = w + "px";
+        }
+    }
+    setWindowWidth();
+    </script>
 </body>
 </html>
 

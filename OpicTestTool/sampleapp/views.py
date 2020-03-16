@@ -1,11 +1,11 @@
 import os
-from random import randint
+import random
 
 from django.shortcuts import HttpResponse, render, redirect
 from django.utils import timezone
 
 from .models import Question
-from .forms import AddQuestionForm, TitleChoiceForm, NoteForm, TTSContextForm, ExamTypeChoiceForm
+from .forms import AddQuestionForm, TitleChoiceForm, NoteForm, TTSContextForm
 
 from .pages.practice import Practice
 from .pages.exam import Exam
@@ -16,7 +16,6 @@ from .utils.singleton import Singleton
 
 INIT_INDEX = 1
 INIT_TITLE = '------------------------------------------------------------'
-INIT_NUM_OF_QUESTIONS = 0
 
 
 class _CurrentQuestion(object):
@@ -25,10 +24,14 @@ class _CurrentQuestion(object):
     def __init__(self):
         self.index = INIT_INDEX
         self.title = INIT_TITLE
-        self.num_of_questions = 0
+        self.num_of_questions = len(Question.objects.all()) - 1
 
 
 _current_question = _CurrentQuestion()
+
+
+def main_page(request):
+    return HttpResponse('<H1>Can not Support this Request</H1>', status=404)
 
 
 def practice_page(request):
@@ -71,12 +74,33 @@ def practice_page(request):
 
 def exam_page(request):
     if request.method == 'GET':
+        titles = []
+        for t in list(Question.objects.values_list('title')):
+            if t[0] == INIT_TITLE or t[0] == "자기소개":
+                continue
+            titles.append(t[0])
 
-        types = ExamTypeChoiceForm()
+        questions = ["자기소개"]
+        for _ in range(0, 14):
+            q = random.choice(titles)
+            titles.remove(q)
+            questions.append(q)
+
         data = {
-            'types': types['types']
+            'questions': questions,
         }
         return render(request, 'exam.html', data)
+
+    elif request.method == 'POST':
+        return HttpResponse('<H1>수고 하셨습니다. 결과 페이지는 기능은 곧 업데이트 됩니다.</H1>', status=200)
+
+
+def history_page(request):
+    if request.method == 'GET':
+        data = {
+
+        }
+        return render(request, 'history.html', data)
 
 
 def tts_page(request):
@@ -90,10 +114,9 @@ def tts_page(request):
         if form.is_valid():
             context = form.cleaned_data['context']
             _tts = TTS(context)
-
-            response = HttpResponse(
-                _tts.text_to_speach(context), content_type='audio/mpeg')
-            response['Content-Disposition'] = 'attachment; filename=TTS.mp3'
+            file, file_name = _tts.text_to_speach()
+            response = HttpResponse(file, content_type='audio/mpeg')
+            response['Content-Disposition'] = 'attachment; filename=' + file_name
             return response
 
     return HttpResponse('<H1> Page Error </H1>')
@@ -121,7 +144,7 @@ def random_question(request):
         if len(questions) < 2:
             return redirect('practice_page')
 
-        _current_question.index = randint(2, len(questions))
+        _current_question.index = random.randint(2, len(questions))
         _current_question.title = questions[_current_question.index - 1][0]
 
         return redirect('practice_page')

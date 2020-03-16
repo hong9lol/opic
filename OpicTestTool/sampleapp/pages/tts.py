@@ -10,7 +10,7 @@ class TTS():
         self.context = context
         self.client = texttospeech.TextToSpeechClient()
         self.voice = texttospeech.types.VoiceSelectionParams(
-            language_code='en-US', ssml_gender=texttospeech.enums.SsmlVoiceGender.NEUTRAL)
+            language_code='en-US', ssml_gender=texttospeech.enums.SsmlVoiceGender.FEMALE)
         self.audio_config = texttospeech.types.AudioConfig(
             audio_encoding=texttospeech.enums.AudioEncoding.MP3)
 
@@ -20,12 +20,12 @@ class TTS():
         response = self.client.synthesize_speech(
             synthesis_input, self.voice, self.audio_config)
 
-        title_time = _getTime()
-        with open('./tts_' + title_time + '.mp3', 'wb') as out:
+        file_name = './tts_' + self._getTime() + '.mp3'
+        with open(file_name, 'wb') as out:
             out.write(response.audio_content)
 
-        file = open('./tts_' + title_time + '.mp3', "rb").read()
-        return file
+        file = open(file_name, "rb").read()
+        return file, file_name
 
     def make_question_audio(self, title='TTS'):
         synthesis_input = texttospeech.types.SynthesisInput(text=self.context)
